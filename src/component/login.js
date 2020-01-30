@@ -1,42 +1,7 @@
-// import React, { Component } from 'react';
-// import { observer, inject }  from 'mobx-react';
-// import { withRouter } from 'react-router-dom';
-
-// @inject('LoginStore')
-// @observer
-// class App extends Component {
- 
-//   handleSubmit = (e) => {
-//     e.preventDefault();
-//     const email = this.email.value;
-//     this.props.LoginStore.addEmail(email);
-//     const password = this.password.value;
-//     this.props.LoginStore.addPassword(password);
-//     this.password.value = "";
-//     this.email.value = ""
-//     this.props.history.push('./dashboard');
-//   }
-//   render() {
-//     const { LoginStore } = this.props;
-//     return (
-//       <div>
-//     <h2> Get Details : {LoginStore.details}</h2>
-//       <form onSubmit={e => this.handleSubmit(e)}>
-//         <input type="text" placeholder="Enter Email" ref={input =>this.email = input} /><br />
-//         <input type="text" placeholder="Enter Password" ref={input =>this.password = input} /><br />
-//         <button>Submit</button>
-//       </form>
-        
-//       </div>
-//     );
-//   }
-// }
-// export default withRouter(App);
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -46,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
 function Copyright() {
   return (
@@ -84,26 +50,26 @@ function SignIn(props) {
   const classes = useStyles();
 
   const loginSuccess =() => {
-    if(props.LoginStore.email === "" || props.LoginStore.password === "") {
-      alert("Fill the details");
-    } else {
-      console.log("props.LoginStore.title : ",props.LoginStore.title);
+  
+    console.log("props.LoginStore.title : ",props.LoginStore.title);
     console.log("Logged in ... ");
-    props.history.push('/dashboard');
-    }
-    
-  }
+    if(props.LoginStore.email !== "" && props.LoginStore.password !== "") {
+      localStorage.setItem('user',props.LoginStore.email)
+      props.history.push('/dashboard');
+      }
+   }
   const passwordChangeHandler = (e) => {
-    console.log(e.target.value);
-    props.LoginStore.addEmail(e.target.value);
-  }
-
-  const emailChangeHandler = (e) => {
     console.log(e.target.value);
     props.LoginStore.addPassword(e.target.value);
   }
 
+  const emailChangeHandler = (e) => {
+    console.log(e.target.value);
+    props.LoginStore.addEmail(e.target.value);
+  }
+
   return (
+    
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -113,31 +79,25 @@ function SignIn(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={loginSuccess}>
-          <TextField
-            variant="outlined"
+        <ValidatorForm className={classes.form} onSubmit={loginSuccess}>
+          <TextValidator
+
             margin="normal"
-            required
-            TextField
-            type="email"
             fullWidth
-            id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
-            autoFocus
+            validators={['required', 'isEmail']}
+            errorMessages={['this field is required', 'email is not valid']}
             onChange={emailChangeHandler}
           />
-          <TextField
-            variant="outlined"
+          <TextValidator
+            
             margin="normal"
-            required
+            validators={['required']}
+            errorMessages={['this field is required']}
             fullWidth
             name="password"
             label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
             onChange={passwordChangeHandler}
           />
           
@@ -153,7 +113,7 @@ function SignIn(props) {
           </Button>
           <Grid container>
          </Grid>
-        </form>
+        </ValidatorForm>
       </div>
       <Box mt={8}>
         <Copyright />

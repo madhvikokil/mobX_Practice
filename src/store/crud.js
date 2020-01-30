@@ -16,6 +16,7 @@ class Operation {
         this.description = data;
     }
     @action updateAllData =(id, title, description) => {
+       alert('Id',id);
         for(let i=0;i<this.allData.length;i++) {
             console.log("this.allData[i].id,id===>", this.allData[i].id,id)
             if(this.allData[i].id == id){

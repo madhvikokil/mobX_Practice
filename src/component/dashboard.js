@@ -17,17 +17,16 @@ class FormDialog extends React.Component{
         super(props);
   
         extendObservable(this, {
-          open: ''
+          open: '',
+          close: true,
+          title:'',
+          description:''
         });
       }
-      state ={
-        open : true,
-       
-      }
 
+     
    handleClickOpen = () => {
     this.open = true
-    
     console.log("this.add Data : ", typeof this.allData);
     console.log("handle here");
   };
@@ -52,8 +51,8 @@ class FormDialog extends React.Component{
 
   updateHandler =() => {
     this.props.Crud.updateAllData(this.props.match.params.id,this.props.Crud.title,this.props.Crud.description )
-       this.setState({open : false})
-       this.props.history.goBack();
+    this.close  = true
+    this.props.history.goBack();
     
   }
 
@@ -68,16 +67,18 @@ class FormDialog extends React.Component{
   }
  
 render(){
+  console.log("extends observable : ",this.extendObservable)
     const { Crud } = this.props;
     const user = localStorage.getItem('user');
     let a =toJS(this.props.Crud.allData);
-    let titleValue;
-    let decriptionValue;
+    
     let storeID = this.props.match.params.id;
     for(let i=0;i<Crud.allData.length;i++) {
       if(Crud.allData[i].id == storeID){
-        titleValue = Crud.allData[i].title;
-        decriptionValue = Crud.allData[i].description;
+        this.title = Crud.allData[i].title;
+        console.log("changes title : ",Crud.title);
+        this.description = Crud.allData[i].description;
+        console.log("changes description : ",Crud.title)
     }
     }
     return(
@@ -118,7 +119,7 @@ render(){
           </DialogActions>
         </Dialog> 
         {this.props.match.path === '/dashboard/:id' ? 
-        <Dialog open={this.state.open} onClose={this.updateHandler} aria-labelledby="form-dialog-title">
+        <Dialog open={this.close} onClose={this.updateHandler} aria-labelledby="form-dialog-title">
           <DialogContent>
             <DialogContentText>
               Add Data Contents
@@ -130,9 +131,8 @@ render(){
               label="Title"
               type="text"
               fullWidth
-              value={titleValue}
-              onChange={this.onChangeTitle}
-            />
+              value={Crud.title}
+              onChange={this.onChangeTitle} />
              <TextField
               name="description"
               autoFocus
@@ -140,12 +140,11 @@ render(){
               label="Description"
               type="text"
               fullWidth
-              value={decriptionValue}
-              onChange={this.onChangeDescription}
-            />
+              value={Crud.description}
+              onChange={this.onChangeDescription}/>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.updateHandler} close={this.state.close}color="primary">
+            <Button onClick={this.updateHandler} close={this.close}color="primary">
               update
             </Button>
           </DialogActions>
