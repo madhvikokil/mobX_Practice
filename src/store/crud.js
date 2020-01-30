@@ -16,7 +16,9 @@ class Operation {
         this.description = data;
     }
     @action updateAllData =(id, title, description) => {
-       alert('Id',id);
+       alert(id);
+       alert(title)
+       alert(description)
         for(let i=0;i<this.allData.length;i++) {
             console.log("this.allData[i].id,id===>", this.allData[i].id,id)
             if(this.allData[i].id == id){
@@ -25,6 +27,10 @@ class Operation {
             }
         }
         console.log("updated : ", toJS(this.allData));
+    }
+
+    @action fetchData =(data) => {
+        
     }
 
     @action deleteData = (id) => {

@@ -58,11 +58,13 @@ class FormDialog extends React.Component{
 
   onChangeTitle = e => {
     console.log(e.target.value);
+    this.title = e.target.value
     this.props.Crud.changeTitle(e.target.value);
   };  
 
   onChangeDescription = e => {
     console.log(e.target.value);
+    this.description = e.target.value
     this.props.Crud.changeDescription(e.target.value);
   }
  
@@ -71,13 +73,14 @@ render(){
     const { Crud } = this.props;
     const user = localStorage.getItem('user');
     let a =toJS(this.props.Crud.allData);
-    
+      let titleValue;
+      let descriptionValue;
     let storeID = this.props.match.params.id;
     for(let i=0;i<Crud.allData.length;i++) {
       if(Crud.allData[i].id == storeID){
-        this.title = Crud.allData[i].title;
+         titleValue = Crud.allData[i].title;
         console.log("changes title : ",Crud.title);
-        this.description = Crud.allData[i].description;
+         descriptionValue = Crud.allData[i].description;
         console.log("changes description : ",Crud.title)
     }
     }
@@ -131,7 +134,7 @@ render(){
               label="Title"
               type="text"
               fullWidth
-              value={Crud.title}
+              value={titleValue}
               onChange={this.onChangeTitle} />
              <TextField
               name="description"
@@ -140,7 +143,7 @@ render(){
               label="Description"
               type="text"
               fullWidth
-              value={Crud.description}
+              value={descriptionValue}
               onChange={this.onChangeDescription}/>
           </DialogContent>
           <DialogActions>
