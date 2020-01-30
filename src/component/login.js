@@ -50,21 +50,16 @@ function SignIn(props) {
   const classes = useStyles();
 
   const loginSuccess =() => {
-  
-    console.log("props.LoginStore.title : ",props.LoginStore.title);
-    console.log("Logged in ... ");
-    if(props.LoginStore.email !== "" && props.LoginStore.password !== "") {
+      if(props.LoginStore.email !== "" && props.LoginStore.password !== "") {
       localStorage.setItem('user',props.LoginStore.email)
       props.history.push('/dashboard');
       }
    }
   const passwordChangeHandler = (e) => {
-    console.log(e.target.value);
     props.LoginStore.addPassword(e.target.value);
   }
 
   const emailChangeHandler = (e) => {
-    console.log(e.target.value);
     props.LoginStore.addEmail(e.target.value);
   }
 

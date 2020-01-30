@@ -4,33 +4,29 @@ import { toJS } from 'mobx';
 class Operation {
     @observable title = "";
     @observable description ="";
-    @observable allData = []
-
+    @observable allData = [];
+  
     @action addDetails = (data) => {    
         this.allData.push(data);
     }
-    @action changeTitle = (data) => {
-        this.title = data;
+    @action changeTitle = (data, id) => {
+            this.title = data;
     }
-    @action changeDescription = (data) => {
-        this.description = data;
+    @action changeDescription = (data, id) => {
+            this.description = data;
     }
-    @action updateAllData =(id, title, description) => {
-       alert(id);
-       alert(title)
-       alert(description)
-        for(let i=0;i<this.allData.length;i++) {
+    
+    @action updateAllData =(id) => {
+       for(let i=0;i<this.allData.length;i++) {
             console.log("this.allData[i].id,id===>", this.allData[i].id,id)
-            if(this.allData[i].id == id){
-                this.allData[i].title = title;
-                this.allData[i].description = description;
+            if(this.allData[i].id === Number(id)){
+                this.allData[i].title = this.title;
+                this.allData[i].description = this.description;
             }
         }
         console.log("updated : ", toJS(this.allData));
-    }
-
-    @action fetchData =(data) => {
-        
+        this.title = "";
+        this.description = "";
     }
 
     @action deleteData = (id) => {

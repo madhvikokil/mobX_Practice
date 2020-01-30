@@ -23,7 +23,9 @@ function DenseTable(props) {
     props.Crud.deleteData(id);
   }
 
-  const editHandler =(id) => {
+  const editHandler =(id,title,desc) => {
+    props.Crud.title = title;
+    props.Crud.description = desc;
     props.history.push(`/dashboard/${id}`)
   }
 
@@ -46,7 +48,7 @@ function DenseTable(props) {
               </TableCell>
               <TableCell>{row.description}</TableCell>
               <button onClick={() => deletehandler(row.id)}> Delete </button>
-              <button onClick={() => editHandler(row.id)}> Edit </button>
+              <button onClick={() => editHandler(row.id, row.title, row.description)}> Edit </button>
             </TableRow>
           ))}
         </TableBody>

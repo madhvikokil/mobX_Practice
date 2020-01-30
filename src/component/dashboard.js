@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Tables from '../component/table';
 import { withRouter } from 'react-router-dom';
+import './dashboard.css';
 
 @inject('Crud')
 @observer
@@ -18,25 +19,17 @@ class FormDialog extends React.Component{
   
         extendObservable(this, {
           open: '',
-          close: true,
-          title:'',
-          description:''
-        });
+          close: true
+       });
       }
 
-     
-   handleClickOpen = () => {
+  handleClickOpen = () => {
     this.open = true
-    console.log("this.add Data : ", typeof this.allData);
-    console.log("handle here");
   };
 
    handleClose = () => {
     const { Crud } = this.props;
     this.open = false
-    console.log(Crud.title);
-    console.log(Crud.description);
-    console.log("title : ",this.title);
     const x = Math.floor((Math.random() * 100) + 1);
     let obj = {
         title : Crud.title,
@@ -44,46 +37,23 @@ class FormDialog extends React.Component{
         id : x
     }
 
-    console.log(this.props.Crud.allData.push(obj));
-    console.log(toJS(Crud.allData));
+    Crud.allData.push(obj);
+    Crud.title = "";
+    Crud.description ="";
       
   };
 
   updateHandler =() => {
-    this.props.Crud.updateAllData(this.props.match.params.id,this.props.Crud.title,this.props.Crud.description )
+    this.props.Crud.updateAllData(this.props.match.params.id)
     this.close  = true
     this.props.history.goBack();
-    
   }
 
-  onChangeTitle = e => {
-    console.log(e.target.value);
-    this.title = e.target.value
-    this.props.Crud.changeTitle(e.target.value);
-  };  
-
-  onChangeDescription = e => {
-    console.log(e.target.value);
-    this.description = e.target.value
-    this.props.Crud.changeDescription(e.target.value);
-  }
- 
 render(){
-  console.log("extends observable : ",this.extendObservable)
     const { Crud } = this.props;
     const user = localStorage.getItem('user');
-    let a =toJS(this.props.Crud.allData);
-      let titleValue;
-      let descriptionValue;
-    let storeID = this.props.match.params.id;
-    for(let i=0;i<Crud.allData.length;i++) {
-      if(Crud.allData[i].id == storeID){
-         titleValue = Crud.allData[i].title;
-        console.log("changes title : ",Crud.title);
-         descriptionValue = Crud.allData[i].description;
-        console.log("changes description : ",Crud.title)
-    }
-    }
+    let a = toJS(Crud.allData);
+    
     return(
         <div>
             <h2>Welcome {user}</h2>
@@ -103,7 +73,7 @@ render(){
               label="Title"
               type="text"
               fullWidth
-              onChange={this.onChangeTitle}
+              onChange={(e) =>Crud.changeTitle(e.target.value)}
             />
              <TextField
               name="description"
@@ -112,7 +82,7 @@ render(){
               label="Description"
               type="text"
               fullWidth
-              onChange={this.onChangeDescription}
+              onChange={(e) =>Crud.changeDescription(e.target.value)}
             />
           </DialogContent>
           <DialogActions>
@@ -134,8 +104,8 @@ render(){
               label="Title"
               type="text"
               fullWidth
-              value={titleValue}
-              onChange={this.onChangeTitle} />
+              value={Crud.title}
+              onChange={(e) =>Crud.changeTitle(e.target.value)} />
              <TextField
               name="description"
               autoFocus
@@ -143,8 +113,8 @@ render(){
               label="Description"
               type="text"
               fullWidth
-              value={descriptionValue}
-              onChange={this.onChangeDescription}/>
+              value={Crud.description}
+              onChange={(e) =>Crud.changeDescription(e.target.value)}/>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.updateHandler} close={this.close}color="primary">
@@ -160,7 +130,7 @@ render(){
          
       </div> 
     )
-}
+  }
 }
 
 export default withRouter(FormDialog);
