@@ -91,7 +91,7 @@ render(){
           Add Data
         </Button>
         
-        <Dialog open={this.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <Dialog open={this.open} aria-labelledby="form-dialog-title">
           <DialogContent>
             <DialogContentText>
               Add Data Contents
@@ -122,7 +122,7 @@ render(){
           </DialogActions>
         </Dialog> 
         {this.props.match.path === '/dashboard/:id' ? 
-        <Dialog open={this.close} onClose={this.updateHandler} aria-labelledby="form-dialog-title">
+        <Dialog open={this.close} aria-labelledby="form-dialog-title">
           <DialogContent>
             <DialogContentText>
               Add Data Contents
