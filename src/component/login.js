@@ -47,22 +47,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function SignIn(props) {
+  const form = React.useRef('form');
   const classes = useStyles();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('')
 
-  const loginSuccess =() => {
-      if(props.LoginStore.email !== "" && props.LoginStore.password !== "") {
-      localStorage.setItem('user',props.LoginStore.email)
-      props.history.push('/dashboard');
+  const loginSuccess = () => {
+    
+      localStorage.setItem('user',email)
+      let obj = {
+        email : email,
+        password : password
       }
+      props.LoginStore.addDetails(obj)
+      props.history.push('/dashboard');
+    
    }
-  const passwordChangeHandler = (e) => {
-    props.LoginStore.addPassword(e.target.value);
-  }
-
-  const emailChangeHandler = (e) => {
-    props.LoginStore.addEmail(e.target.value);
-  }
-
+ 
   return (
     
     <Container component="main" maxWidth="xs">
@@ -74,17 +75,16 @@ function SignIn(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <ValidatorForm className={classes.form} onSubmit={loginSuccess}>
+        <ValidatorForm ref={form} className={classes.form} onSubmit={loginSuccess}>
           <TextValidator
-
             margin="normal"
             fullWidth
             label="Email Address"
             name="email"
+            value={email}
             validators={['required', 'isEmail']}
             errorMessages={['this field is required', 'email is not valid']}
-            onChange={emailChangeHandler}
-          />
+            onChange={(e) =>setEmail(e.target.value)} />
           <TextValidator
             
             margin="normal"
@@ -93,8 +93,8 @@ function SignIn(props) {
             fullWidth
             name="password"
             label="Password"
-            onChange={passwordChangeHandler}
-          />
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} />
           
           <Button
             type="submit"
@@ -102,11 +102,10 @@ function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={loginSuccess}
           >
             Sign In
           </Button>
-          <Grid container>
+          <Grid container >
          </Grid>
         </ValidatorForm>
       </div>

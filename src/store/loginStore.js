@@ -1,17 +1,11 @@
 import { observable, action, computed} from "mobx";
 
 class LoginStore {
-    @observable email = "";
-    @observable password = "";
+    @observable loginData = []
 
-    @action addEmail = (email) => {
-        this.email = email;
+    @action addDetails = (obj) => {
+        this.loginData.push(obj);
     }
-
-    @action addPassword = (password) => {
-        this.password = password;
-    }
-
     @computed get details(){
         return this.email + " " + this.password
     }
