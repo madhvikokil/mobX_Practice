@@ -6,6 +6,10 @@ class LoginStore {
     @action addDetails = (obj) => {
         this.loginData.push(obj);
     }
+
+    @action logout =() => {
+        this.loginData.pop();
+    }
     @computed get details(){
         return this.email + " " + this.password
     }

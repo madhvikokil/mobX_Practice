@@ -28,8 +28,6 @@ function DenseTable(props) {
     props.Crud.description = desc;
     props.history.push(`/dashboard/${id}`)
   }
-
-  console.log("allData : ", props.Crud.allData);
   return(
     
     <TableContainer component={Paper}>

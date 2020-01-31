@@ -2,9 +2,7 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,19 +10,6 @@ import Container from '@material-ui/core/Container';
 import { inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -53,8 +38,8 @@ function SignIn(props) {
   const [password, setPassword] = React.useState('')
 
   const loginSuccess = () => {
-    
-      localStorage.setItem('user',email)
+      const activeUser = email.split('@');
+      localStorage.setItem("user",activeUser[0]);
       let obj = {
         email : email,
         password : password
@@ -84,7 +69,7 @@ function SignIn(props) {
             value={email}
             validators={['required', 'isEmail']}
             errorMessages={['this field is required', 'email is not valid']}
-            onChange={(e) =>setEmail(e.target.value)} />
+            onChange={(e) => setEmail(e.target.value)} />
           <TextValidator
             
             margin="normal"
@@ -109,9 +94,7 @@ function SignIn(props) {
          </Grid>
         </ValidatorForm>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
+     
     </Container>
   );
 }

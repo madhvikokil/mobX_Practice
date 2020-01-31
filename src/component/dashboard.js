@@ -1,5 +1,5 @@
 import React from 'react';
-import { extendObservable, toJS } from 'mobx';
+import { toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -9,27 +9,27 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Tables from '../component/table';
 import { withRouter } from 'react-router-dom';
-import './dashboard.css';
 
 @inject('Crud')
+@inject('LoginStore')
 @observer
 class FormDialog extends React.Component{
     constructor(props) {
         super(props);
-  
-        extendObservable(this, {
-          open: '',
-          close: true
-       });
-      }
+      
+        this.state = {
+          open : '',
+          close : true
+        }
+    }
 
   handleClickOpen = () => {
-    this.open = true
+    this.setState({open : true})
   };
 
    handleClose = () => {
     const { Crud } = this.props;
-    this.open = false
+    this.setState({open : false})
     const x = Math.floor((Math.random() * 100) + 1);
     let obj = {
         title : Crud.title,
@@ -45,8 +45,22 @@ class FormDialog extends React.Component{
 
   updateHandler =() => {
     this.props.Crud.updateAllData(this.props.match.params.id)
-    this.close  = true
+    this.setState({close : true})
     this.props.history.goBack();
+  }
+
+  closehandler =() => {
+    this.setState({open : false})
+  }
+  cancelhandler =() =>{
+    this.props.history.goBack();
+
+  }
+
+  logoutHandler =() => {
+    localStorage.clear('user');
+    this.props.LoginStore.logout();
+    this.props.history.push("/");
   }
 
 render(){
@@ -56,79 +70,89 @@ render(){
     
     return(
         <div>
-            <h2>Welcome {user}</h2>
-        <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-          Add Data
-        </Button>
+          <h2>Welcome {user}</h2>
+            <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+              Add Data
+            </Button>
+            <Button variant="outlined" color="primary" style={{float:"right"}} onClick={this.logoutHandler}>
+              Logout
+            </Button>
         
-        <Dialog open={this.open} aria-labelledby="form-dialog-title">
-          <DialogContent>
-            <DialogContentText>
-              Add Data Contents
-            </DialogContentText>
-            <TextField
-              name="title"
-              autoFocus
-              margin="dense"
-              label="Title"
-              type="text"
-              fullWidth
-              onChange={(e) =>Crud.changeTitle(e.target.value)}
-            />
-             <TextField
-              name="description"
-              autoFocus
-              margin="dense"
-              label="Description"
-              type="text"
-              fullWidth
-              onChange={(e) =>Crud.changeDescription(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Add
-            </Button>
-          </DialogActions>
-        </Dialog> 
-        {this.props.match.path === '/dashboard/:id' ? 
-        <Dialog open={this.close} aria-labelledby="form-dialog-title">
-          <DialogContent>
-            <DialogContentText>
-              Add Data Contents
-            </DialogContentText>
-            <TextField
-              name="title"
-              autoFocus
-              margin="dense"
-              label="Title"
-              type="text"
-              fullWidth
-              value={Crud.title}
-              onChange={(e) =>Crud.changeTitle(e.target.value)} />
-             <TextField
-              name="description"
-              autoFocus
-              margin="dense"
-              label="Description"
-              type="text"
-              fullWidth
-              value={Crud.description}
-              onChange={(e) =>Crud.changeDescription(e.target.value)}/>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.updateHandler} close={this.close}color="primary">
-              update
-            </Button>
-          </DialogActions>
-        </Dialog> : null}
+          <Dialog open={this.state.open} aria-labelledby="form-dialog-title">
+            <DialogContent>
+              <DialogContentText>
+                Add Data Contents
+              </DialogContentText>
+              <TextField
+                name="title"
+                autoFocus
+                margin="dense"
+                label="Title"
+                type="text"
+                fullWidth
+                onChange={(e) =>Crud.changeTitle(e.target.value)}
+              />
+              <TextField
+                name="description"
+                autoFocus
+                margin="dense"
+                label="Description"
+                type="text"
+                fullWidth
+                onChange={(e) =>Crud.changeDescription(e.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Add
+              </Button>
+              <Button onClick={this.closehandler} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog> 
+          {this.props.match.path === '/dashboard/:id' ? 
+          
+          <Dialog open={this.state.close} aria-labelledby="form-dialog-title">
+            <DialogContent>
+              <DialogContentText>
+                Add Data Contents
+              </DialogContentText>
+              <TextField
+                name="title"
+                autoFocus
+                margin="dense"
+                label="Title"
+                type="text"
+                fullWidth
+                value={Crud.title}
+                onChange={(e) =>Crud.changeTitle(e.target.value)} />
+              <TextField
+                name="description"
+                autoFocus
+                margin="dense"
+                label="Description"
+                type="text"
+                fullWidth
+                value={Crud.description}
+                onChange={(e) =>Crud.changeDescription(e.target.value)}/>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.updateHandler} close={this.state.close}color="primary">
+                update
+              </Button>
+              <Button onClick={this.cancelhandler}color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog> : null}
 
-        {this.props.Crud.allData.length > 0 ?
-         <Tables data={a}/> : 
-        null
-        }
-         
-      </div> 
+          {this.props.Crud.allData.length > 0 ?
+          <Tables data={a}/> : 
+          null
+          }
+          
+        </div> 
     )
   }
 }

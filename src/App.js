@@ -1,16 +1,18 @@
 import React from 'react';
 import Login from './component/login';
 import Dashboard from './component/dashboard';
-import { Route } from 'react-router-dom';
-// import Edit from './component/edit';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Route path="/dashboard/:id" exact component={Dashboard} /> 
-      <Route path="/dashboard" exact component={Dashboard}/>
-      <Route path="/" exact component={Login} />
+      <Switch>
+        <Route path="/dashboard/:id"  component={Dashboard} /> 
+        <Route path="/dashboard"  component={Dashboard}/>
+        <Route path="/" exact component={Login} />
+      </Switch>
+  
     </div>
   );
 }
